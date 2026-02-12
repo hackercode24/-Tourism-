@@ -117,7 +117,13 @@ app.post('/api/newsletter', (req, res) => {
 
 // Fallback to index.html for SPA routing
 app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, 'public', 'index.html'));
+	const indexPath = path.join(__dirname, 'public', 'index.html');
+	res.sendFile(indexPath, (err) => {
+		if (err) {
+			console.error('Error serving index.html:', err.message);
+			res.status(500).send('Error loading application');
+		}
+	});
 });
 
 app.listen(port, () => {
